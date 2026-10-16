@@ -22,6 +22,17 @@ const PRECACHE = [
   'models/cxr_pneumonia.onnx',
   'samples/normal.jpg',
   'samples/pneumonia.jpg',
+  'samples/',
+  'samples/normal_01.jpg',
+  'samples/normal_02.jpg',
+  'samples/normal_03.jpg',
+  'samples/normal_04.jpg',
+  'samples/pneumonia_05.jpg',
+  'samples/pneumonia_06.jpg',
+  'samples/pneumonia_07.jpg',
+  'samples/pneumonia_08.jpg',
+  'samples/pneumonia_09.jpg',
+  'samples/pneumonia_10.jpg',
 ];
 const CACHE_FIRST = /\.(onnx|wasm|mjs|png|jpe?g|webp)$/i;
 

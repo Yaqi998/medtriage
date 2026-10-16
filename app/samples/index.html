@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sample Chest X-rays</title>
+<meta name="description" content="Labeled chest X-ray images from the held-out test set, to download and try in the Medical Image Triage app.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#2a78d6">
+<link rel="icon" type="image/png" sizes="192x192" href="../icons/icon-192.png">
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <h1>Sample chest X-rays</h1>
+  <p class="sub">Images to try in the <a href="../">Medical Image Triage app</a>.</p>
+</header>
+<main>
+  <section class="card">
+    <h2>How to try them</h2>
+    <ol class="g-steps">
+      <li><strong>Save an image.</strong> Tap or click <em>Download</em>. On a phone you can also long-press the image and choose <em>Save to Photos</em> or <em>Download image</em>.</li>
+      <li><strong>Open the app</strong> at <a href="../">yaqi998.github.io/medtriage</a>.</li>
+      <li><strong>Upload it</strong> in step 2 and compare the app's answer with the true label shown here.</li>
+    </ol>
+    <p class="hint">These 10 images were drawn at random from the held-out test set (patients the model never saw during training), one image per patient. They were resized to at most 1024&nbsp;px.</p>
+  </section>
+  <div class="g-grid">
+    <figure class="g-card">
+      <a href="normal_01.jpg" download><img src="normal_01.jpg" alt="Normal chest X-ray, sample 1" width="1024" height="727" loading="lazy"></a>
+      <figcaption><span class="g-truth neg">Normal</span><a class="btn g-dl" href="normal_01.jpg" download>Download</a></figcaption>
+    </figure>
+    <figure class="g-card">
+      <a href="normal_02.jpg" download><img src="normal_02.jpg" alt="Normal chest X-ray, sample 2" width="1024" height="946" loading="lazy"></a>
+      <figcaption><span class="g-truth neg">Normal</span><a class="btn g-dl" href="normal_02.jpg" download>Download</a></figcaption>
+    </figure>
+    <figure class="g-card">
+      <a href="normal_03.jpg" download><img src="normal_03.jpg" alt="Normal chest X-ray, sample 3" width="1024" height="791" loading="lazy"></a>
+      <figcaption><span class="g-truth neg">Normal</span><a class="btn g-dl" href="normal_03.jpg" download>Download</a></figcaption>
+    </figure>
+    <figure class="g-card">
+      <a href="normal_04.jpg" download><img src="normal_04.jpg" alt="Normal chest X-ray, sample 4" width="1024" height="899" loading="lazy"></a>
+      <figcaption><span class="g-truth neg">Normal</span><a class="btn g-dl" href="normal_04.jpg" download>Download</a></figcaption>
+    </figure>
+    <figure class="g-card">
+      <a href="pneumonia_05.jpg" download><img src="pneumonia_05.jpg" alt="Pneumonia (bacterial) chest X-ray, sample 5" width="944" height="696" loading="lazy"></a>
+      <figcaption><span class="g-truth pos">Pneumonia (bacterial)</span><a class="btn g-dl" href="pneumonia_05.jpg" download>Download</a></figcaption>
+    </figure>
+    <figure class="g-card">
+      <a href="pneumonia_06.jpg" download><img src="pneumonia_06.jpg" alt="Pneumonia (bacterial) chest X-ray, sample 6" width="904" height="648" loading="lazy"></a>
+      <figcaption><span class="g-truth pos">Pneumonia (bacterial)</span><a class="btn g-dl" href="pneumonia_06.jpg" download>Download</a></figcaption>
+    </figure>
+    <figure class="g-card">
+      <a href="pneumonia_07.jpg" download><img src="pneumonia_07.jpg" alt="Pneumonia (bacterial) chest X-ray, sample 7" width="1024" height="648" loading="lazy"></a>
+      <figcaption><span class="g-truth pos">Pneumonia (bacterial)</span><a class="btn g-dl" href="pneumonia_07.jpg" download>Download</a></figcaption>
+    </figure>
+    <figure class="g-card">
+      <a href="pneumonia_08.jpg" download><img src="pneumonia_08.jpg" alt="Pneumonia (viral) chest X-ray, sample 8" width="1024" height="671" loading="lazy"></a>
+      <figcaption><span class="g-truth pos">Pneumonia (viral)</span><a class="btn g-dl" href="pneumonia_08.jpg" download>Download</a></figcaption>
+    </figure>
+    <figure class="g-card">
+      <a href="pneumonia_09.jpg" download><img src="pneumonia_09.jpg" alt="Pneumonia (viral) chest X-ray, sample 9" width="880" height="560" loading="lazy"></a>
+      <figcaption><span class="g-truth pos">Pneumonia (viral)</span><a class="btn g-dl" href="pneumonia_09.jpg" download>Download</a></figcaption>
+    </figure>
+    <figure class="g-card">
+      <a href="pneumonia_10.jpg" download><img src="pneumonia_10.jpg" alt="Pneumonia (viral) chest X-ray, sample 10" width="864" height="408" loading="lazy"></a>
+      <figcaption><span class="g-truth pos">Pneumonia (viral)</span><a class="btn g-dl" href="pneumonia_10.jpg" download>Download</a></figcaption>
+    </figure>
+  </div>
+</main>
+<footer>
+  <p>Images: Kermany, Zhang &amp; Goldbaum (2018), <a href="https://doi.org/10.17632/rscbjbr9sj.2">Mendeley Data</a>, licensed <a href="https://creativecommons.org/licenses/by/4.0/" rel="license">CC&nbsp;BY&nbsp;4.0</a>; resized from the originals. Paediatric patients aged 1&ndash;5. Educational demo, not a medical device.</p>
+</footer>
+</body>
+</html>

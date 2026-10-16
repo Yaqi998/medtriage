@@ -38,6 +38,8 @@ The full report, with confidence intervals, the confusion matrix and per-subtype
    - drag and drop an image onto it (desktop), or
    - click **Normal chest X-ray** or **Pneumonia chest X-ray** to try a sample from the held-out test set.
 
+   More labeled test images to download and upload are at https://yaqi998.github.io/medtriage/samples/ (10 random holdout X-rays, one per patient).
+
    JPEG, PNG, WebP and other browser-readable formats up to 40 MB are accepted.
 6. **Step 3 – conversion.** A progress bar shows *"Converting image…"* while the image is decoded, converted to grayscale, resized to 256×256, center-cropped to 224×224 and normalized into a `[1, 3, 224, 224]` tensor. When it finishes, it shows *"✓ Conversion complete"* and a thumbnail of exactly what the model sees.
 7. **Step 4 – result.** You get **POSITIVE** (pneumonia pattern detected) or **NEGATIVE**, plus:
@@ -90,7 +92,7 @@ app/                    the web app (static files only; this folder is what gets
   manifest.webmanifest, icons/   installable-app metadata
   registry.json         list of disease categories -> model file, preprocessing and threshold
   models/cxr_pneumonia.onnx   browser model (BatchNorm folded, fp16-stored weights)
-  samples/              two holdout images for quick testing
+  samples/              holdout images: 2 one-click samples + a gallery page (samples/index.html) of 10 to download
   vendor/ort/           ONNX Runtime Web 1.30.0 (MIT)
 src/                    data / training / evaluation / export pipeline (Python)
 models/                 trained checkpoint (.pt), ONNX exports, training logs
