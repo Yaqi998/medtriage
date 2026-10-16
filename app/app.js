@@ -10,7 +10,7 @@
     convertFill: $('#convert-fill'), convertLabel: $('#convert-label'),
     convertDone: $('#convert-done'), inputPreview: $('#input-preview'), inputDesc: $('#input-desc'),
     stepResult: $('#step-result'), resultBody: $('#result-body'),
-    error: $('#error'), errorText: $('#error-text'), testOut: $('#test-output'),
+    error: $('#error'), errorText: $('#error-text'), testOut: $('#test-output'), offline: $('#offline-status'),
   };
   const MAX_SIDE = 2048;
   const MAX_FILE_MB = 40;
@@ -387,6 +387,19 @@
     }
   }
 
+  // ---------- offline support: sw.js precaches the app and model so the link works without a network ----------
+  async function registerOffline() {
+    if (!('serviceWorker' in navigator) || !window.isSecureContext) return;
+    try {
+      await navigator.serviceWorker.register('sw.js');
+      await navigator.serviceWorker.ready;
+      el.offline.textContent = '✓ Saved on this device. This page now works offline.';
+      show(el.offline);
+    } catch (e) {
+      console.warn('Offline mode unavailable:', e);
+    }
+  }
+
   // ---------- self test (?test): runs every sample through the full pipeline and prints machine-readable results ----------
   async function runSelfTest() {
     const results = [];
@@ -404,4 +417,5 @@
   }
 
   init();
+  registerOffline();
 })();

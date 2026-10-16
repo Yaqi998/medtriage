@@ -6,12 +6,17 @@
 <title>Medical Image Triage</title>
 <meta name="description" content="Upload a medical image and get a positive/negative screening result from a neural network that runs entirely in your browser. Educational demo, not a medical device.">
 <meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#2a78d6">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <header class="top">
   <h1>Medical Image Triage</h1>
   <p class="sub">On-device screening demo. The image never leaves your browser.</p>
+  <p class="offline-status hidden" id="offline-status" aria-live="polite"></p>
 </header>
 
 <main>
@@ -74,7 +79,7 @@
 </main>
 
 <footer>
-  <p>Model: ResNet18 fine-tuned on chest X-rays from Kermany et&nbsp;al. 2018 (Mendeley Data, <a href="https://creativecommons.org/licenses/by/4.0/" rel="license">CC&nbsp;BY&nbsp;4.0</a>); sample images are from the same dataset. Inference runs locally with ONNX Runtime Web (MIT). Nothing is uploaded anywhere.</p>
+  <p>Model: ResNet18 fine-tuned on chest X-rays from Kermany et&nbsp;al. 2018 (Mendeley Data, <a href="https://creativecommons.org/licenses/by/4.0/" rel="license">CC&nbsp;BY&nbsp;4.0</a>); sample images are from the same dataset. Inference runs locally with ONNX Runtime Web (MIT). Nothing is uploaded anywhere. After the first visit the app is stored on your device and works offline; on a phone you can add it to your home screen.</p>
 </footer>
 
 <pre id="test-output" class="hidden"></pre>

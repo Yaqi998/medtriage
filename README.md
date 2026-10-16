@@ -2,9 +2,11 @@
 
 A web app that screens a frontal **chest X-ray** for a **pneumonia** pattern. You upload an image and get a positive or negative screening result. The neural network (a fine-tuned ResNet18) runs **entirely in your browser** through ONNX Runtime Web and WebAssembly, so the image never leaves your device.
 
-> **Not a medical device.** This is an educational and portfolio demo of a research model. It is not clinically validated and must not be used for diagnosis or treatment decisions.
+It is a **standalone, offline-capable web app**. It is hosted for free on GitHub Pages as plain static files, and no server does any computation. After the first visit, a service worker keeps the whole app and model on your device, so the link keeps working with no internet connection. On a phone you can also add it to your home screen like a regular app.
 
-**Live demo:** _add your Render URL here after deploying, e.g. `https://medtriage.onrender.com`_
+**Live app:** https://yaqi998.github.io/medtriage/
+
+> **Not a medical device.** This is an educational and portfolio demo of a research model. It is not clinically validated and must not be used for diagnosis or treatment decisions.
 
 ---
 
@@ -27,45 +29,65 @@ The full report, with confidence intervals, the confusion matrix and per-subtype
 
 ## How to use the app (step by step)
 
-1. **Open the app.** Use the live URL, or run it locally (see below). It works on laptops and phones.
-2. **Wait for "Model ready".** The first visit downloads the model (about 22 MB) and the WebAssembly runtime (about 3.5 MB compressed), with a progress bar. After that your browser caches them.
-3. **Step 1 – choose what to screen.** Choose a category from the dropdown. For now there is one: *Chest X-ray — Pneumonia*.
-4. **Step 2 – provide an image.** You can:
+1. **Open the link** https://yaqi998.github.io/medtriage/ on a laptop or phone.
+2. **Wait for "Model ready".** The first visit downloads the model (about 22 MB) and the WebAssembly runtime, with a progress bar. When the green line **"✓ Saved on this device. This page now works offline."** appears under the title, everything is stored locally. From then on the same link works without internet, e.g. in airplane mode.
+3. *(Optional, phone)* **Install it.** On iPhone Safari, tap **Share → Add to Home Screen**. On Android Chrome, tap **⋮ → Install app** (or *Add to Home screen*). It then opens full-screen from its own icon.
+4. **Step 1 – choose what to screen.** Choose a category from the dropdown. For now there is one: *Chest X-ray — Pneumonia*.
+5. **Step 2 – provide an image.** You can:
    - tap the upload area to choose a file (on a phone you can also take a photo), or
    - drag and drop an image onto it (desktop), or
    - click **Normal chest X-ray** or **Pneumonia chest X-ray** to try a sample from the held-out test set.
 
    JPEG, PNG, WebP and other browser-readable formats up to 40 MB are accepted.
-5. **Step 3 – conversion.** A progress bar shows *"Converting image…"* while the image is decoded, converted to grayscale, resized to 256×256, center-cropped to 224×224 and normalized into a `[1, 3, 224, 224]` tensor. When it finishes, it shows *"✓ Conversion complete"* and a thumbnail of exactly what the model sees.
-6. **Step 4 – result.** You get **POSITIVE** (pneumonia pattern detected) or **NEGATIVE**, plus:
+6. **Step 3 – conversion.** A progress bar shows *"Converting image…"* while the image is decoded, converted to grayscale, resized to 256×256, center-cropped to 224×224 and normalized into a `[1, 3, 224, 224]` tensor. When it finishes, it shows *"✓ Conversion complete"* and a thumbnail of exactly what the model sees.
+7. **Step 4 – result.** You get **POSITIVE** (pneumonia pattern detected) or **NEGATIVE**, plus:
    - the model score (0–1) on a bar with the 0.5 decision threshold marked,
    - the model's holdout sensitivity and specificity, for context,
    - the caveats.
-7. To screen another image, upload a new one. The model stays loaded.
+8. To screen another image, upload a new one. The model stays loaded.
 
-Developers can add `?test` to the URL (e.g. `https://…/?test`). This runs both sample images through the full pipeline and prints machine-readable `TEST-RESULT` JSON.
+Developers can add `?test` to the URL (e.g. `https://…/medtriage/?test`). This runs both sample images through the full pipeline and prints machine-readable `TEST-RESULT` JSON.
 
 ---
 
+## Deployment (GitHub Pages)
+
+`.github/workflows/pages.yml` publishes the `app/` folder to GitHub Pages on every push to `main`. There are no servers to run or pay for.
+
+One-time setup: in the repository go to **Settings → Pages → Build and deployment → Source** and choose **GitHub Actions**. After that, every `git push` redeploys within about a minute. Progress is shown under the **Actions** tab.
+
+How offline mode and updates work:
+- `app/sw.js` precaches every file the app needs. The workflow stamps it with the commit SHA, so each deployment gets a fresh cache name. Returning visitors fetch the new version the next time they open the link online, and the old cache is deleted.
+- GitHub Pages can't set custom HTTP headers. The service worker adds the `Cross-Origin-Opener-Policy` / `Cross-Origin-Embedder-Policy` headers itself, which enables multi-threaded WebAssembly from the second page load onwards. The first visit runs single-threaded, which is still fast.
+
 ## Running locally
 
-**With Docker** (same image as production):
+The app is plain static files in `app/`. Any static file server works:
+
+```bash
+cd app && python3 -m http.server 8000
+# open http://localhost:8000
+```
+
+It must be served over `http://localhost` or `https://`. Opening `index.html` as a file (`file://`) won't work, because browsers block the model download and the service worker there.
+
+**With Docker** (optional, e.g. to self-host on your own server):
 
 ```bash
 docker build -t medtriage .
-docker run --rm -p 10000:10000 medtriage
+docker run --rm -p 10000:10000 medtriage   # nginx listens on $PORT, default 10000
 # open http://localhost:10000
 ```
-
-**Without Docker:** any static file server works, e.g. `cd app && python3 -m http.server 8000`. It must be served over HTTP; opening `index.html` as a file won't work. A plain server doesn't send the cross-origin-isolation headers, so inference runs single-threaded, which is slightly slower.
 
 ---
 
 ## Repository layout
 
 ```
-app/                    the deployed web app (static files only)
+app/                    the web app (static files only; this folder is what gets published)
   index.html, app.js, styles.css
+  sw.js                 service worker: offline cache + cross-origin isolation headers
+  manifest.webmanifest, icons/   installable-app metadata
   registry.json         list of disease categories -> model file, preprocessing and threshold
   models/cxr_pneumonia.onnx   browser model (BatchNorm folded, fp16-stored weights)
   samples/              two holdout images for quick testing
@@ -75,11 +97,11 @@ models/                 trained checkpoint (.pt), ONNX exports, training logs
 reports/                holdout metrics, report and plots
 data/splits.csv         patient-disjoint train/val/holdout assignment for every image
 data/manifest.csv       splits.csv + path of each preprocessed image
-deploy/nginx.conf.template  web server config used by the Docker image
-Dockerfile, render.yaml     deployment
+.github/workflows/pages.yml  publishes app/ to GitHub Pages on every push to main
+Dockerfile, deploy/     optional nginx image for self-hosting
 ```
 
-To add a new disease category later, add an ONNX model under `app/models/` and an entry in `app/registry.json`. The dropdown, preprocessing and result display are all driven by the registry.
+To add a new disease category later, add an ONNX model under `app/models/` and an entry in `app/registry.json`. Also add the model file to the `PRECACHE` list in `app/sw.js` so it is available offline. The dropdown, preprocessing and result display are all driven by the registry.
 
 ---
 
@@ -89,7 +111,7 @@ The images themselves (about 2.3 GB) are **not** in this repository. The split f
 
 **Dataset:** Kermany, Zhang & Goldbaum (2018), *Labeled Optical Coherence Tomography (OCT) and Chest X-Ray Images for Classification*, Mendeley Data, v2. DOI: [10.17632/rscbjbr9sj.2](https://doi.org/10.17632/rscbjbr9sj.2). License: **CC BY 4.0**.
 
-1. Download `ChestXRay2017.zip` from <https://data.mendeley.com/datasets/rscbjbr9sj/2>. The same images are mirrored on Kaggle as [`paultimothymooney/chest-xray-pneumonia`](https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia), but that mirror moves 16 images into an extra `val/` folder; if you use it, move them back into `train/` so paths match `data/splits.csv`.
+1. Download `ChestXRay2017.zip` from <https://data.mendeley.com/datasets/rscbjbr9sj/2>. The same images are mirrored on Kaggle as [`paultimothymooney/chest-xray-pneumonia`](https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia), but that mirror moves 16 images into an extra `val/` folder. If you use it, move them back into `train/` so the paths match `data/splits.csv`.
 2. Unzip it into `data/raw/` so you have:
 
    ```
@@ -114,20 +136,6 @@ python src/quantize_onnx.py       # optional int8 experiment
 ```
 
 If you already have `data/splits.csv` and want the exact published split, skip `make_split.py`.
-
----
-
-## Deploying to Render
-
-The `Dockerfile` builds a small `nginx:alpine` image that serves `app/`. Inference happens in the browser, so the server needs no Python and no GPU, and Render's free instance is enough. nginx listens on `$PORT`, which Render sets to 10000. It also sends the `Cross-Origin-Opener-Policy` / `Cross-Origin-Embedder-Policy` headers, so the browser can use multi-threaded WebAssembly.
-
-1. Sign in at <https://dashboard.render.com> with GitHub.
-2. **New → Web Service**, then pick this repository. Alternatively, use **New → Blueprint**, which reads `render.yaml`.
-3. Set **Language / Runtime** to **Docker**. Leave the Dockerfile path as `./Dockerfile` and the root directory empty.
-4. Instance type: **Free**. No environment variables are needed.
-5. **Deploy.** When the log shows the service is live, open the `https://<name>.onrender.com` URL.
-
-On the free plan the service sleeps after 15 minutes without traffic. The first request after that takes roughly 30–60 seconds to wake it up.
 
 ---
 
