@@ -1,0 +1,81 @@
+{
+  "split": "holdout",
+  "n_images": 873,
+  "n_patients": 520,
+  "n_normal": 237,
+  "n_pneumonia": 636,
+  "model": "resnet18 (ImageNet init; stem+layer1+layer2 frozen; layer3+layer4+head fine-tuned)",
+  "best_epoch": 5,
+  "val_auroc": 0.9968701095461658,
+  "auroc": 0.9966098771329246,
+  "auprc": 0.9986948862272076,
+  "at_threshold": {
+    "default_0.5": {
+      "threshold": 0.5,
+      "tp": 630,
+      "tn": 219,
+      "fp": 18,
+      "fn": 6,
+      "accuracy": 0.9725085910652921,
+      "sensitivity": 0.9905660377358491,
+      "specificity": 0.9240506329113924,
+      "ppv": 0.9722222222222222,
+      "npv": 0.9733333333333334,
+      "f1": 0.9813084112149533
+    },
+    "val_tuned": {
+      "threshold": 0.9197511672973633,
+      "tp": 613,
+      "tn": 230,
+      "fp": 7,
+      "fn": 23,
+      "accuracy": 0.9656357388316151,
+      "sensitivity": 0.9638364779874213,
+      "specificity": 0.9704641350210971,
+      "ppv": 0.9887096774193549,
+      "npv": 0.9090909090909091,
+      "f1": 0.9761146496815286
+    }
+  },
+  "ci95_val_tuned": {
+    "auroc": [
+      0.9938510489188582,
+      0.9986226688531677
+    ],
+    "accuracy": [
+      0.9530355097365406,
+      0.97709049255441
+    ],
+    "sensitivity": [
+      0.9484690462911322,
+      0.9771244320899091
+    ],
+    "specificity": [
+      0.9462786754623281,
+      0.9914163090128756
+    ]
+  },
+  "inference_ms_per_image": 31.154598430533042,
+  "sensitivity_by_subtype_val_tuned": {
+    "bacteria": {
+      "n": 398,
+      "sensitivity": 0.9773869346733668
+    },
+    "virus": {
+      "n": 238,
+      "sensitivity": 0.9411764705882353
+    }
+  },
+  "by_original_dataset_split": {
+    "test": {
+      "n": 96,
+      "auroc": 0.9931287219422813,
+      "accuracy_val_tuned": 0.9375
+    },
+    "train": {
+      "n": 777,
+      "auroc": 0.9989514731369151,
+      "accuracy_val_tuned": 0.9691119691119691
+    }
+  }
+}

@@ -1,0 +1,5 @@
+# Only app/ and deploy/ are needed to build the image.
+*
+!app/
+!deploy/
+**/.DS_Store

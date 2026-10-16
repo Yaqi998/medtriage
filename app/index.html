@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Medical Image Triage</title>
+<meta name="description" content="Upload a medical image and get a positive/negative screening result from a neural network that runs entirely in your browser. Educational demo, not a medical device.">
+<meta name="color-scheme" content="light dark">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="top">
+  <h1>Medical Image Triage</h1>
+  <p class="sub">On-device screening demo. The image never leaves your browser.</p>
+</header>
+
+<main>
+  <div class="notice warn" role="note">
+    <span class="ico" aria-hidden="true">!</span>
+    <div><strong>Not a medical device.</strong> This is an educational demo of a research model. It is not clinically validated and must not be used for diagnosis or treatment decisions. If you have a health concern, see a clinician.</div>
+  </div>
+
+  <section class="card" id="step-category">
+    <h2><span class="num" aria-hidden="true">1</span> What should be screened?</h2>
+    <label for="category" class="vh">Screening category</label>
+    <select id="category"></select>
+    <p class="hint" id="category-info"></p>
+    <div class="model-status" id="model-status" aria-live="polite">
+      <div class="bar"><div class="fill" id="model-fill"></div></div>
+      <span id="model-label">Loading model…</span>
+    </div>
+  </section>
+
+  <section class="card" id="step-upload">
+    <h2><span class="num" aria-hidden="true">2</span> Upload the image</h2>
+    <label class="drop" id="drop" for="file">
+      <input type="file" id="file" accept="image/*">
+      <span class="drop-main">Tap to choose a photo or file</span>
+      <span class="drop-sub">JPEG, PNG, WebP… or drag and drop here</span>
+    </label>
+    <div class="samples">
+      <span>Or try a sample image from the held-out test set:</span>
+      <div class="sample-row" id="samples"></div>
+    </div>
+    <figure class="preview hidden" id="preview">
+      <img id="preview-img" alt="Preview of the uploaded image">
+      <figcaption id="preview-cap"></figcaption>
+    </figure>
+  </section>
+
+  <section class="card hidden" id="step-convert">
+    <h2><span class="num" aria-hidden="true">3</span> Convert to model input</h2>
+    <div class="progress" id="progress">
+      <div class="bar" id="convert-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-labelledby="convert-label">
+        <div class="fill" id="convert-fill"></div>
+      </div>
+      <div class="progress-label" id="convert-label">Converting image…</div>
+    </div>
+    <div class="convert-done hidden" id="convert-done">
+      <canvas id="input-preview" width="224" height="224" aria-label="The exact grayscale image the model receives"></canvas>
+      <p id="input-desc"></p>
+    </div>
+  </section>
+
+  <section class="card hidden" id="step-result" aria-live="polite">
+    <h2><span class="num" aria-hidden="true">4</span> Result</h2>
+    <div id="result-body"></div>
+  </section>
+
+  <div class="notice err hidden" id="error" role="alert">
+    <span class="ico" aria-hidden="true">!</span>
+    <div id="error-text"></div>
+  </div>
+</main>
+
+<footer>
+  <p>Model: ResNet18 fine-tuned on chest X-rays from Kermany et&nbsp;al. 2018 (Mendeley Data, <a href="https://creativecommons.org/licenses/by/4.0/" rel="license">CC&nbsp;BY&nbsp;4.0</a>); sample images are from the same dataset. Inference runs locally with ONNX Runtime Web (MIT). Nothing is uploaded anywhere.</p>
+</footer>
+
+<pre id="test-output" class="hidden"></pre>
+<script src="vendor/ort/ort.wasm.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

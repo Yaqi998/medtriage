@@ -1,0 +1,43 @@
+{
+  "name": "pneumonia_resnet18",
+  "arch": "resnet18 (ImageNet init; stem+layer1+layer2 frozen; layer3+layer4+head fine-tuned)",
+  "task": "chest X-ray pneumonia screening (binary)",
+  "class_names": {
+    "0": "NORMAL",
+    "1": "PNEUMONIA"
+  },
+  "img_size": 224,
+  "input": "RGB-replicated grayscale, resize 256 -> center crop 224, ImageNet mean/std",
+  "dataset": "Kermany et al. 2018, Mendeley Data rscbjbr9sj v2, CC BY 4.0",
+  "train_images": 4075,
+  "train_normal": 1105,
+  "train_pneumonia": 2970,
+  "val_images": 876,
+  "best": {
+    "epoch": 5,
+    "val_auroc": 0.9968701095461658,
+    "val_acc_at_0_5": 0.9668949771689498,
+    "val_loss": 0.0741082989787473,
+    "threshold_youden": 0.9197511672973633
+  },
+  "threshold_default": 0.5,
+  "args": {
+    "manifest": "data/manifest.csv",
+    "out": "models",
+    "name": "pneumonia_resnet18",
+    "epochs": 8,
+    "batch": 32,
+    "img": 224,
+    "lr": 0.0001,
+    "head_lr": 0.001,
+    "wd": 0.0001,
+    "patience": 3,
+    "workers": 2,
+    "threads": 0,
+    "seed": 42,
+    "limit": 0
+  },
+  "epochs_run": 8,
+  "total_minutes": 31.416211811701455,
+  "created": "2026-10-15T22:48:51+00:00"
+}

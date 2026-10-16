@@ -1,0 +1,13 @@
+# Dataset images (2.5 GB) - see README "Getting the data"
+data/raw/
+data/processed/
+*.zip
+
+# OS / editor / Python clutter
+.DS_Store
+__pycache__/
+*.pyc
+.venv/
+venv/
+.ipynb_checkpoints/
+medPrompt.txt

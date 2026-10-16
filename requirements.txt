@@ -1,0 +1,9 @@
+# Training / evaluation pipeline only (src/). The deployed web app needs none of this.
+torch
+torchvision
+numpy
+pillow
+scikit-learn
+matplotlib
+onnx
+onnxruntime

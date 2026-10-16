@@ -1,0 +1,46 @@
+server {
+    listen ${PORT};
+    listen [::]:${PORT};
+    server_name _;
+    root /usr/share/nginx/html;
+    index index.html;
+
+    # MIME types that older nginx mime.types files miss: ONNX Runtime Web
+    # needs application/wasm for streaming compilation and a JS type for .mjs.
+    include /etc/nginx/mime.types;
+    types {
+        text/javascript         mjs;
+        application/octet-stream onnx;
+    }
+
+    # Cross-origin isolation enables SharedArrayBuffer, which lets ONNX
+    # Runtime Web use multi-threaded WebAssembly (faster inference).
+    # Every resource the page loads is same-origin, so this is safe.
+    add_header Cross-Origin-Opener-Policy "same-origin" always;
+    add_header Cross-Origin-Embedder-Policy "require-corp" always;
+    add_header X-Content-Type-Options "nosniff" always;
+
+    # Compress text and the 14 MB wasm binary (~3.5 MB gzipped). The .onnx model is
+    # deliberately left uncompressed: it barely shrinks, and keeping Content-Length lets
+    # the app show a real download percentage.
+    gzip on;
+    gzip_comp_level 6;
+    gzip_min_length 1024;
+    gzip_types text/css text/javascript application/javascript application/json application/wasm image/svg+xml;
+
+    location / {
+        try_files $uri $uri/ =404;
+        add_header Cross-Origin-Opener-Policy "same-origin" always;
+        add_header Cross-Origin-Embedder-Policy "require-corp" always;
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header Cache-Control "no-cache" always;
+    }
+
+    # Large, versioned-by-content binaries: let browsers cache them for a day.
+    location ~* \.(onnx|wasm|mjs|jpg|jpeg|png)$ {
+        add_header Cross-Origin-Opener-Policy "same-origin" always;
+        add_header Cross-Origin-Embedder-Policy "require-corp" always;
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header Cache-Control "public, max-age=86400" always;
+    }
+}

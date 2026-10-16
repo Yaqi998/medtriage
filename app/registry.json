@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "categories": [
+    {
+      "id": "cxr_pneumonia",
+      "label": "Chest X-ray — Pneumonia",
+      "modality": "Frontal chest X-ray",
+      "description": "Screens a frontal chest X-ray for a pneumonia pattern (bacterial or viral). Trained on paediatric (age 1–5) X-rays from Kermany et al. 2018.",
+      "model": "models/cxr_pneumonia.onnx",
+      "input": {
+        "name": "image",
+        "resize": 256,
+        "crop": 224,
+        "color": "grayscale",
+        "channels": 3,
+        "mean": [0.485, 0.456, 0.406],
+        "std": [0.229, 0.224, 0.225]
+      },
+      "output": {
+        "name": "logit",
+        "activation": "sigmoid",
+        "threshold": 0.5,
+        "positive": "Pneumonia pattern detected",
+        "negative": "No pneumonia pattern detected"
+      },
+      "evaluation": {
+        "set": "held-out test set (patients never seen in training)",
+        "n_images": 873,
+        "n_patients": 520,
+        "auroc": 0.997,
+        "accuracy": 0.973,
+        "sensitivity": 0.991,
+        "specificity": 0.924
+      },
+      "samples": [
+        { "label": "Normal chest X-ray", "file": "samples/normal.jpg", "truth": "negative" },
+        { "label": "Pneumonia chest X-ray", "file": "samples/pneumonia.jpg", "truth": "positive" }
+      ],
+      "caveats": "Only meaningful for frontal chest X-rays similar to the training data (children aged 1–5, one hospital). Adult X-rays, other body parts, other modalities or ordinary photos produce meaningless output."
+    }
+  ]
+}

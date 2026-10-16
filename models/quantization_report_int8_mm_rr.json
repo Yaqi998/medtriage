@@ -1,0 +1,24 @@
+{
+  "fp32": {
+    "file": "models/pneumonia_resnet18.onnx",
+    "mb": 44.7,
+    "auroc": 0.9966098771329246,
+    "accuracy": 0.9725085910652921,
+    "sensitivity": 0.9905660377358491,
+    "specificity": 0.9240506329113924,
+    "mean_abs_prob_diff_vs_torch": 2.820914455007182e-07,
+    "max_abs_prob_diff_vs_torch": 3.061763763412273e-06,
+    "ms_per_image": 36.23916657656466
+  },
+  "int8": {
+    "file": "models/pneumonia_resnet18_int8_mm_rr.onnx",
+    "mb": 11.3,
+    "auroc": 0.9972932091393998,
+    "accuracy": 0.9736540664375716,
+    "sensitivity": 0.9937106918238994,
+    "specificity": 0.919831223628692,
+    "mean_abs_prob_diff_vs_torch": 0.006521589926118767,
+    "max_abs_prob_diff_vs_torch": 0.34386225484085087,
+    "ms_per_image": 13.965663221693532
+  }
+}
